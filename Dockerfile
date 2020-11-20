@@ -1,4 +1,4 @@
-FROM nextcloud:20.0.1-apache
+FROM nextcloud:20.0.2-apache
 MAINTAINER Liang Wang
 
 RUN apt-get update && apt-get install -y ssl-cert
