@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 VERSION=${1:-latest}
 
 docker build -t netcasper/nextcloud-ssl:${VERSION}-apache-ssl .
