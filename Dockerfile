@@ -1,9 +1,35 @@
-FROM nextcloud:23.0.4-apache
+FROM nextcloud:24.0.6-apache
 MAINTAINER Liang Wang
 
-RUN apt-get update && apt-get install -y fonts-wqy-* fonts-liberation2 fonts-arphic-gbsn00lp fonts-arphic-gkai00mp fonts-arphic-ukai fonts-arphic-uming fonts-noto-cjk fonts-noto-cjk-extra fonts-open-sans ssl-cert
+RUN apt-get update && apt-get install -y fonts-wqy-* fonts-liberation2 fonts-arphic-gbsn00lp fonts-arphic-gkai00mp fonts-arphic-ukai fonts-arphic-uming fonts-noto-cjk fonts-noto-cjk-extra fonts-open-sans ssl-cert wget gnupg2 unzip liblapack-dev libopenblas-dev libx11-dev libbz2-dev 
+
+# Enable repo and install dlib
+RUN echo "deb https://repo.delellis.com.ar bullseye bullseye" > /etc/apt/sources.list.d/20-pdlib.list \
+  && wget -qO - https://repo.delellis.com.ar/repo.gpg.key | apt-key add -
+RUN apt update \
+  && apt install -y libdlib-dev
+
+# Install pdlib extension
+RUN wget https://github.com/goodspb/pdlib/archive/master.zip \
+  && mkdir -p /usr/src/php/ext/ \
+  && unzip -d /usr/src/php/ext/ master.zip \
+  && rm master.zip
+RUN docker-php-ext-install pdlib-master
+RUN docker-php-ext-install bz2
+
+# Increase memory limits
+RUN echo memory_limit=4096M > /usr/local/etc/php/conf.d/memory-limit.ini
+
+# These last lines are just for testing the extension.. You can delete them.
+RUN wget https://github.com/matiasdelellis/pdlib-min-test-suite/archive/master.zip \
+  && unzip -d /tmp/ master.zip \
+  && rm master.zip
+RUN cd /tmp/pdlib-min-test-suite-master \
+    && make
 
 RUN a2enmod ssl && a2ensite default-ssl
+
+ENV PHP_MEMORY_LIMIT 4G
 
 EXPOSE 80 443
 
