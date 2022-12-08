@@ -1,0 +1,2 @@
+34 0 * * * root docker exec --user www-data nextcloud_app.1.$(docker stack ps -f 'name=nextcloud_app.1' nextcloud -q --no-trunc | head -n1) /usr/local/bin/php -f /var/www/html/occ face:background_job >/home/liang/Downloads/facerecog.log 2>&1
+

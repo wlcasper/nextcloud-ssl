@@ -1,4 +1,4 @@
-FROM nextcloud:24.0.6-apache
+FROM nextcloud:24.0.7-apache
 MAINTAINER Liang Wang
 
 RUN apt-get update && apt-get install -y fonts-wqy-* fonts-liberation2 fonts-arphic-gbsn00lp fonts-arphic-gkai00mp fonts-arphic-ukai fonts-arphic-uming fonts-noto-cjk fonts-noto-cjk-extra fonts-open-sans ssl-cert wget gnupg2 unzip liblapack-dev libopenblas-dev libx11-dev libbz2-dev 
@@ -29,7 +29,7 @@ RUN cd /tmp/pdlib-min-test-suite-master \
 
 RUN a2enmod ssl && a2ensite default-ssl
 
-ENV PHP_MEMORY_LIMIT 4G
+# ENV PHP_MEMORY_LIMIT 4G
 
 EXPOSE 80 443
 
