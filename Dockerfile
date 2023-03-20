@@ -1,7 +1,7 @@
 FROM nextcloud:24.0.8-apache
 MAINTAINER Liang Wang
 
-RUN apt-get update && apt-get install -y fonts-wqy-* fonts-liberation2 fonts-arphic-gbsn00lp fonts-arphic-gkai00mp fonts-arphic-ukai fonts-arphic-uming fonts-noto-cjk fonts-noto-cjk-extra fonts-open-sans ssl-cert wget gnupg2 unzip liblapack-dev libopenblas-dev libx11-dev libbz2-dev 
+RUN apt-get update && apt-get install -y fonts-wqy-* fonts-liberation2 fonts-arphic-gbsn00lp fonts-arphic-gkai00mp fonts-arphic-ukai fonts-arphic-uming fonts-noto-cjk fonts-noto-cjk-extra fonts-open-sans wget gnupg2 unzip liblapack-dev libopenblas-dev libx11-dev libbz2-dev
 
 # Enable repo and install dlib
 RUN echo "deb https://repo.delellis.com.ar bullseye bullseye" > /etc/apt/sources.list.d/20-pdlib.list \
@@ -26,6 +26,18 @@ RUN wget https://github.com/matiasdelellis/pdlib-min-test-suite/archive/master.z
   && rm master.zip
 RUN cd /tmp/pdlib-min-test-suite-master \
     && make
+
+# apt-get install ssl-cert
+
+# Use existing cert, instead of creating new one for new
+# containers. Cert path is hard-coded in
+# /etc/apache2/site-available/default-ssl.conf.
+
+ADD ssl-cert-snakeoil.pem /etc/ssl/certs/
+RUN chmod 644 /etc/ssl/certs/ssl-cert-snakeoil.pem
+
+ADD ssl-cert-snakeoil.key /etc/ssl/private/
+RUN chmod 640 /etc/ssl/private/ssl-cert-snakeoil.key
 
 RUN a2enmod ssl && a2ensite default-ssl
 
