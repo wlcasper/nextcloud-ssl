@@ -1,4 +1,4 @@
-FROM nextcloud:25.0.6-apache
+FROM nextcloud:25.0.10-apache
 MAINTAINER Liang Wang
 
 RUN apt-get update && apt-get install -y fonts-wqy-* fonts-liberation2 fonts-arphic-gbsn00lp fonts-arphic-gkai00mp fonts-arphic-ukai fonts-arphic-uming fonts-noto-cjk fonts-noto-cjk-extra fonts-open-sans wget gnupg2 unzip liblapack-dev libopenblas-dev libx11-dev libbz2-dev
